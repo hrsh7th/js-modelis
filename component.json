@@ -1,0 +1,17 @@
+{
+  "name": "modelis",
+  "version": "0.0.1",
+  "description": "Modelis javascript modeling support.",
+  "license": "MIT",
+  "scripts": [
+    "index.js",
+    "lib/plugins/assurance/index.js",
+    "lib/plugins/monk/index.js"
+  ],
+  "dependencies": {
+    "component/emitter": "^1.1.2",
+    "lodash/lodash": "^2.4.1",
+    "danmilon/assurance": "~0.2.5",
+    "then/promise": "^5.0.0"
+  }
+}

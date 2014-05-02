@@ -1,0 +1,22 @@
+{
+  "name": "modelis",
+  "version": "0.0.1",
+  "description": "Modelis javascript modeling support.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --harmony"
+  },
+  "author": "hrsh7th <hrsh7th@gmail.com> (https://github.com/hrsh7th)",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "co": "~3.0.5"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "component-emitter": "~1.1.2",
+    "assurance": "~0.2.4",
+    "monk": "~0.8.1",
+    "promise": "~5.0.0"
+  }
+}
