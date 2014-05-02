@@ -17,7 +17,7 @@ exports.plugins.monk = require('./lib/plugins/monk');
  * @return {Boolean}
  */
 exports.of = function(Modelised) {
-  return _.isFunction(Modelised) && Modelised.prototype.constructor === ModelisBase;
+  return _.isFunction(Modelised) && Modelised.prototype.constructor.name === 'ModelisBase';
 };
 
 /**
@@ -47,8 +47,7 @@ exports.define = function(name, option) {
   if (!_.isString(name)) throw new Error('Modelis.define: `name` must be string.');
   if (!name.length) throw new Error('Modelis.define: `name` must be length > 0.');
 
-  option = option || {};
-  _.defaults(option , { primaryKey: 'id' });
+  option = _.defaults(option || {}, { primaryKey: 'id' });
 
   return create(name, option);
 };
