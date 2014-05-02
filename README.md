@@ -48,6 +48,7 @@ var User = Modelis.define('User').attr('name').attr('age');
 
 // define plugin.
 Modelis.plugins.monk.define(User, {
+  statics: 'Repository',
   collection: 'users',
   connection: monk('localhost/test')
 });
@@ -63,7 +64,7 @@ User.Repository.insert(new User({ name: 'john', age: '19' }), function(err, inse
     // update.
     found.set('name', 'bob');
     User.Repository.update(found, function(err, updated) {
-      updated.get('name', 'bob');
+      updated.get('name'); #=> bob
 
       // remove.
       User.Repository.remove(updated, function(err, removed) {
@@ -75,6 +76,7 @@ User.Repository.insert(new User({ name: 'john', age: '19' }), function(err, inse
   });
 
 });
+```
 
 ### [assurance](http://github.com/danmilon/assurance)
 
@@ -96,12 +98,14 @@ User.attr('age', {
 });
 
 // define plugin.
-Modelis.plugins.assurance.define(User);
+Modelis.plugins.assurance.define(User, {
+  methods: 'assurance',
+  attrOptionKey: 'assurance'
+});
 
 // validate.
 var results = new User({}).assurance();
 results.length === 1; #=> true. Because name must be required.
-});
 ```
 
 todo
