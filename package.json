@@ -1,6 +1,6 @@
 {
   "name": "modelis",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Modelis javascript modeling support.",
   "main": "index.js",
   "scripts": {

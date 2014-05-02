@@ -17,7 +17,7 @@ exports.plugins.monk = require('./lib/plugins/monk');
  * @return {Boolean}
  */
 exports.of = function(Modelised) {
-  return _.isFunction(Modelised) && Modelised.prototype.constructor === ModelizeBase;
+  return _.isFunction(Modelised) && Modelised.prototype.constructor === ModelisBase;
 };
 
 /**
@@ -27,7 +27,7 @@ exports.of = function(Modelised) {
  * @return {Boolean}
  */
 exports.instanceof = function(modelised) {
-  return _.isObject(modelised) && modelised instanceof ModelizeBase;
+  return _.isObject(modelised) && modelised instanceof ModelisBase;
 };
 
 /**
@@ -54,9 +54,9 @@ exports.define = function(name, option) {
 };
 
 /**
- * ModelizeBase.
+ * ModelisBase.
  */
-function ModelizeBase() {}
+function ModelisBase() {}
 
 /**
  * create Modelis.
@@ -69,12 +69,12 @@ function create(name, option) {
   /**
    * for Modelis.instanceof.
    */
-  Modelis.prototype = new ModelizeBase();
+  Modelis.prototype = new ModelisBase();
 
   /**
    * for Modelis.of.
    */
-  Modelis.prototype.constructor = ModelizeBase;
+  Modelis.prototype.constructor = ModelisBase;
 
   /**
    * @type {String} name
