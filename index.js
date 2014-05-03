@@ -92,6 +92,10 @@ function create(name, option) {
 
   /**
    * Modelis.
+   *   -> set before
+   *   -> set after
+   *   -> clean before
+   *   -> clean after
    *   .primaryKey
    *   .attr
    *   #primary
@@ -159,7 +163,9 @@ function create(name, option) {
    * clean diff.
    */
   Modelis.prototype.clean = function() {
+    this.emit('clean before', this);
     this._diff = {};
+    this.emit('clean after', this);
   };
 
   /**
@@ -184,8 +190,10 @@ function create(name, option) {
   Modelis.prototype.set = function(key, value) {
     if (!Modelis.attrs.hasOwnProperty(key)) throw new Error('Modelis#set: `key` was not found in defined attrs.');
 
+    this.emit('set before', this);
     this._diff[key] = value;
     this._values[key] = value;
+    this.emit('set after', this);
 
     return this;
   };

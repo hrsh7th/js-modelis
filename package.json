@@ -1,16 +1,25 @@
 {
   "name": "modelis",
-  "version": "0.0.3",
-  "description": "Modelis javascript modeling support.",
+  "version": "0.0.4",
+  "description": "Modelis is very simple javascript modeling module on server-side and client-side.",
+  "homepage": "https://github.com/hrsh7th/js-modelis",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hrsh7th/js-modelis.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hrsh7th/js-modelis/issues"
+  },
+  "keywords": [
+    "component",
+    "model",
+    "schema"
+  ],
+  "author": "hrsh7th",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --harmony"
-  },
-  "author": "hrsh7th <hrsh7th@gmail.com> (https://github.com/hrsh7th)",
-  "license": "MIT",
-  "devDependencies": {
-    "mocha": "~1.18.2",
-    "co": "~3.0.5"
   },
   "dependencies": {
     "lodash": "~2.4.1",
@@ -18,5 +27,9 @@
     "assurance": "~0.2.4",
     "monk": "~0.8.1",
     "promise": "~5.0.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "co": "~3.0.5"
   }
 }
