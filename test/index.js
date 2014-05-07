@@ -30,6 +30,16 @@ describe('Modelis', function() {
     });
   });
 
+  describe('.use', function() {
+    User.use(function() {
+      this.prototype.add = function(x, y) {
+        return x + y;
+      };
+    });
+    var user = new User();
+    assert.equal(user.add(1, 2), 3);
+  });
+
   describe('.define', function() {
     it('attrs', function() {
       assert.ok(School.attrs.hasOwnProperty('users'));

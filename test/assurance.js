@@ -5,7 +5,7 @@ describe('Modelis.plugins.assurance', function() {
 
   describe('arguments passing', function() {
     var User = Modelis.define('User').attr('name', { assurance: { is: 'string' } });
-    Modelis.plugins.assurance.define(User, { methods: 'assurance' });
+    User.use(Modelis.plugins.assurance());
 
     it('success case', function() {
       var user = new User({ name: 'test' });
@@ -20,7 +20,7 @@ describe('Modelis.plugins.assurance', function() {
 
   describe('arguments not passing', function() {
     var User = Modelis.define('User').attr('name', { assurance: { required: true } });
-    Modelis.plugins.assurance.define(User, { methods: 'assurance' });
+    User.use(Modelis.plugins.assurance());
 
     it('success case', function() {
       var user = new User({ name: 'test' });

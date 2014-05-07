@@ -3,6 +3,8 @@ Modelis.
 
 Modelis is very simple javascript modeling module on server-side and client-side.
 
+this module is exprimental version.
+
 Usage
 ===========
 
@@ -23,14 +25,14 @@ var user = new User({
 });
 
 // get.
-user.get('name'); #=> john
-user.get('age');  #=> 19
+user.get('name'); //=> john
+user.get('age');  //=> 19
 
 // set.
 user.set('name', 'bob');
 
 // changed.
-user.get('name'); #=> bob
+user.get('name'); //=> bob
 ```
 
 ## Plugin
@@ -41,12 +43,16 @@ user.get('name'); #=> bob
 
 #### Export API
 
-- Modelised.Repository.drop
-- Modelised.Repository.find
-- Modelised.Repository.findById
-- Modelised.Repository.insert
-- Modelised.Repository.update
-- Modelised.Repository.remove
+- Repository.connection
+- Repository.collection
+- Repository.drop
+- Repository.find
+- Repository.findOne
+- Repository.findById
+- Repository.findAndModify
+- Repository.insert
+- Repository.update
+- Repository.remove
 
 #### Option
 
@@ -54,44 +60,80 @@ user.get('name'); #=> bob
   - monk connection.
 - ```collection``` (required)
   - mongodb collection name.
-- ```statics``` (optional, default=Repository)
-  - object name to export to Modelis.
 
 #### Example
+
+##### use.
+
+```js
+var Modelis = require('modelis');
+
+// define.
+var User = Modelis.define('User').attr('name').attr('age');
+
+if (simple) {
+  // use.
+  User.use(Modelis.plugins.monk({
+    collection: 'users',
+    connection: 'localhost/test'
+  });
+
+  // User.Repository is available.
+  User.Repository.drop(function() {});
+}
+
+if (customize) {
+  // use.
+  User.use(Modelis.plugins.monk({
+    collection: 'users',
+    connection: 'localhost/test'
+  }, function(Repository) {
+    this; //=> User.
+    this.Store = Repository;
+  });
+
+  // User.Store is available.
+  User.Store.drop(function() {});
+}
+```
 
 ##### callback
 
 ```js
 var Modelis = require('modelis');
-var monk = require('monk');
 
 // define.
 var User = Modelis.define('User').attr('name').attr('age');
 
-// define plugin.
-Modelis.plugins.monk.define(User, {
-  statics: 'Store',                  // default: Repository.
-  collection: 'users',               // required.
-  connection: monk('localhost/test') // required.
-});
+// use.
+User.use(Modelis.plugins.monk({
+  collection: 'users',
+  connection: 'localhost/test'
+}));
+
+// connection.
+User.Repository.connection(); //=> monk connection.
+
+// collection.
+User.Repository.collection(); //=> monk collection.
 
 // insert.
-User.Store.insert(new User({ name: 'john', age: '19' }), function(err, inserted) {
-  inserted.get('name'); #=> john
+User.Repository.insert(new User({ name: 'john', age: 19 }), function(err, inserted) {
+  inserted.get('name'); //=> john
 
   // find.
-  User.Store.findById(inserted.primary(), function(err, found) {
-    found.get('name') #=> john
+  User.Repository.findById(inserted.primary(), function(err, found) {
+    found.get('name') //=> john
 
     // update.
     found.set('name', 'bob');
-    User.Store.update(found, function(err, updated) {
-      updated.get('name'); #=> bob
+    User.Repository.update(found, function(err, updated) {
+      updated.get('name'); //=> bob
 
       // remove.
-      User.Store.remove(updated, function(err, removed) {
-        User.Store.findById(updated.primary(), function(err, found) {
-          found === null; #=> true. Because user(john) was deleted.
+      User.Repository.remove(updated, function(err, removed) {
+        User.Repository.findById(updated.primary(), function(err, found) {
+          found === null; //=> true. `updated`(john) was deleted.
         });
       });
     });
@@ -104,38 +146,36 @@ User.Store.insert(new User({ name: 'john', age: '19' }), function(err, inserted)
 
 ```js
 var Modelis = require('modelis');
-var monk = require('monk');
 var co = require('co');
 
 // define.
 var User = Modelis.define('User').attr('name').attr('age');
 
 // define plugin.
-Modelis.plugins.monk.define(User, {
-  statics: 'Store',                  // default: Repository.
-  collection: 'users',               // required.
-  connection: monk('localhost/test') // required.
-});
+User.use(Modelis.plugins.monk({
+  collection: 'users',
+  connection: 'localhost/test'
+}));
 
 co(function*() {
   // insert.
-  var inserted = yield User.Store.insert(new User({ name: 'john', age: '19' }));
-  inserted.get('name'); #=> john
+  var inserted = yield User.Repository.insert(new User({ name: 'john', age: 19 }));
+  inserted.get('name'); //=> john
 
   // find.
-  var found = yield User.Store.findById(inserted.primary());
-  found.get('name') #=> john
+  var found = yield User.Repository.findById(inserted.primary());
+  found.get('name') //=> john
 
   // update.
   found.set('name', 'bob');
-  yield User.Store.update(found); #=> affected rows count: 1.
-  var updated = yield User.Store.findById(found.primary());
-  updated.get('name') #=> bob
+  yield User.Repository.update(found); //=> affected rows count: 1.
+  var updated = yield User.Repository.findById(found.primary());
+  updated.get('name') //=> bob
 
   // remove.
-  yield User.Store.remove(updated); #=> affected rows count: 1.
-  var removed = yield User.Store.findById(updated.primary());
-  removed === null; #=> true. Because `updated` was deleted.
+  yield User.Repository.remove(updated); //=> affected rows count: 1.
+  var removed = yield User.Repository.findById(updated.primary());
+  removed === null; //=> true. `updated` was deleted.
 })();
 ```
 
@@ -147,39 +187,42 @@ co(function*() {
 
 #### Option
 
-- ```methods``` (optional, default=assurance)
-  - method name to export to Modelised instance.
 - ```attrOptionKey``` (optional, default=assurance)
-  - option key in attribute's option to see by this plugin.
+  - key name for plug-in to see attribute's option.
 
 #### Example
+
+##### use.
 
 ```js
 var Modelis = require('modelis');
 
-// define.
-var User = Modelis.define('User');
-User.attr('name', {
-  validate: {
-    is: 'string',
-    required: true
-  }
-});
-User.attr('age', {
-  validate: {
-    isInt: true
-  }
-});
+if (simple) {
+  // define.
+  var User = Modelis.define('User').attr('name', { assurance: { is: 'string' }});
 
-// define plugin.
-Modelis.plugins.assurance.define(User, {
-  methods: 'validate',      // default: `assurance`.
-  attrOptionKey: 'validate' // default: `assurance`.
-});
+  // use.
+  User.use(Modelis.plugins.assurance());
 
-// validate.
-var results = new User({}).validate();
-results.length === 1; #=> true. Because name must be required.
+  // User#assurance is available.
+  new User({}).assurance();
+}
+
+if (customize) {
+  // define.
+  var User = Modelis.define('User').attr('name', { validate: { is: 'string' }});
+
+  // use.
+  User.use(Modelis.plugins.assurance({
+    attrOptionKey: 'validate'
+  }, function(assurance) {
+    this; //=> User.
+    this.prototype.validate = assurance;
+  }));
+
+  // User#validate is available.
+  new User({}).validate();
+}
 ```
 
 Todo

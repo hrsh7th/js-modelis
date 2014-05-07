@@ -96,14 +96,15 @@ function create(name, option) {
    *   -> set after
    *   -> clean before
    *   -> clean after
-   *   .primaryKey
+   *   .use()
+   *   .primaryKey()
    *   .attr
-   *   #primary
-   *   #diff
-   *   #clean
-   *   #get
-   *   #set
-   *   #toJSON
+   *   #primary()
+   *   #diff()
+   *   #clean()
+   *   #get()
+   *   #set()
+   *   #toJSON()
    *
    * @param {Object?} values initial values.
    */
@@ -118,6 +119,13 @@ function create(name, option) {
       this._values[key] = values[key];
     }, this);
   }
+
+  /**
+   * apply plugin.
+   */
+  Modelis.use = function(fn) {
+    fn.call(this);
+  };
 
   /**
    * get primary key.
