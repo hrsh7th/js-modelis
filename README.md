@@ -54,6 +54,10 @@ user.get('name'); //=> bob
 - Repository.update
 - Repository.remove
 
+- methods.insert
+- methods.update
+- methods.remove
+
 #### Option
 
 - ```connection``` (required)
@@ -78,8 +82,11 @@ if (simple) {
     connection: 'localhost/test'
   });
 
-  // User.Repository is available.
+  // User.Repository available.
   User.Repository.drop(function() {});
+
+  // methods available.
+  new User({}).insert(function() {});
 }
 
 if (customize) {
@@ -87,13 +94,24 @@ if (customize) {
   User.use(Modelis.plugins.monk({
     collection: 'users',
     connection: 'localhost/test'
-  }, function(Repository) {
+  }, function(Repository, methods) {
     this; //=> User.
     this.Store = Repository;
+    this.prototype.save = function() {
+      if (this.primary() === undefined) {
+        return methods.insert.apply(this, arguments);
+      } else {
+        return methods.update.apply(this, arguments);
+      }
+    };
+    this.prototype.remove = methods.remove;
   });
 
-  // User.Store is available.
+  // User.Store available.
   User.Store.drop(function() {});
+
+  // methods available.
+  new User({}).save(function() {});
 }
 ```
 
@@ -118,27 +136,18 @@ User.Repository.connection(); //=> monk connection.
 User.Repository.collection(); //=> monk collection.
 
 // insert.
-User.Repository.insert(new User({ name: 'john', age: 19 }), function(err, inserted) {
-  inserted.get('name'); //=> john
+new User({ name: 'john', age: 19 }).insert(function(err, success) {
 
   // find.
-  User.Repository.findById(inserted.primary(), function(err, found) {
-    found.get('name') //=> john
+  User.Repository.findOne({ name: 'john' }, function(err, user) {
 
     // update.
-    found.set('name', 'bob');
-    User.Repository.update(found, function(err, updated) {
-      updated.get('name'); //=> bob
+    user.set('name', 'bob').update(function(err, success) {
 
       // remove.
-      User.Repository.remove(updated, function(err, removed) {
-        User.Repository.findById(updated.primary(), function(err, found) {
-          found === null; //=> true. `updated`(john) was deleted.
-        });
-      });
+      user.remove(function(err, success) {});
     });
   });
-
 });
 ```
 
@@ -159,7 +168,7 @@ User.use(Modelis.plugins.monk({
 
 co(function*() {
   // insert.
-  var inserted = yield User.Repository.insert(new User({ name: 'john', age: 19 }));
+  var inserted = yield new User({ name: 'john', age: 19 }).insert();
   inserted.get('name'); //=> john
 
   // find.
@@ -167,13 +176,12 @@ co(function*() {
   found.get('name') //=> john
 
   // update.
-  found.set('name', 'bob');
-  yield User.Repository.update(found); //=> affected rows count: 1.
+  yield found.set('name', 'bob').update();
   var updated = yield User.Repository.findById(found.primary());
   updated.get('name') //=> bob
 
   // remove.
-  yield User.Repository.remove(updated); //=> affected rows count: 1.
+  yield updated.remove();
   var removed = yield User.Repository.findById(updated.primary());
   removed === null; //=> true. `updated` was deleted.
 })();

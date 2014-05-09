@@ -98,7 +98,7 @@ function create(name, option) {
    *   -> clean after
    *   .use()
    *   .primaryKey()
-   *   .attr
+   *   .attr()
    *   #primary()
    *   #diff()
    *   #clean()
@@ -165,6 +165,19 @@ function create(name, option) {
    */
   Modelis.prototype.diff = function() {
     return this._diff;
+  };
+
+  /**
+   * merge values.
+   *
+   * @param {Object} values
+   */
+  Modelis.prototype.merge = function(values) {
+    this.emit('merge before', this);
+    _.forOwn(Modelis.attrs, function(option, key) {
+      this._values[key] = values[key];
+    }, this);
+    this.emit('merge after', this);
   };
 
   /**
