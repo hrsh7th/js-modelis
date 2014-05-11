@@ -10,7 +10,10 @@ describe('Modelis.plugins.monk', function() {
 
   User.use(Modelis.plugins.monk({
     collection: 'users',
-    connection: 'localhost/test'
+    connection: 'localhost/test',
+    options: {
+      multi: true
+    }
   }));
 
   describe('Repository', function() {
@@ -114,6 +117,18 @@ describe('Modelis.plugins.monk', function() {
 
         var user1 = yield User.Repository.findById(user0.primary());
         assert.ok(user1.get('name') === 'bob');
+      })(done);
+    });
+
+    it('update(multi)', function(done) {
+      co(function*() {
+        var user0 = yield User.Repository.insert({ name: 'john' });
+        var user1 = yield User.Repository.insert({ name: 'bob' });
+
+        // change and update name.
+        user0.set('name', 'bob');
+        var count = yield User.Repository.update({}, { $set: { age: 19 } });
+        assert.ok(count);
       })(done);
     });
 
