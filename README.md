@@ -53,7 +53,6 @@ user.get('name'); //=> bob
 - Repository.insert
 - Repository.update
 - Repository.remove
-
 - methods.insert
 - methods.update
 - methods.remove
