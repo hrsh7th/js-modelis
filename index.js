@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var decoratable = require('decoratable');
 var Emitter = require('component-emitter');
 
 /**
@@ -192,31 +193,42 @@ function create(name, option) {
   /**
    * get value.
    *
+   * decoratable.
+   *
    * @param {String} key
    * @return {Object}
    */
-  Modelis.prototype.get = function(key) {
+  Modelis.prototype.get = decoratable(function(key) {
     if (!Modelis.attrs.hasOwnProperty(key)) throw new Error('Modelis#get: `key` was not found in defined attrs.');
-
     return this._values[key];
-  };
+  });
 
   /**
    * set value.
+   *
+   * decoratable.
    *
    * @param {String} key
    * @param {Object} value
    * @return {Object}
    */
-  Modelis.prototype.set = function(key, value) {
+  Modelis.prototype.set = decoratable(function(key, value) {
     if (!Modelis.attrs.hasOwnProperty(key)) throw new Error('Modelis#set: `key` was not found in defined attrs.');
-
     this.emit('set before', this);
     this._diff[key] = value;
     this._values[key] = value;
     this.emit('set after', this);
-
     return this;
+  });
+
+  /**
+   * use set.
+   *
+   * @param {Function} fn
+   */
+  Modelis.prototype.set.use = function(fn) {
+    this.fns = this.fns || [];
+    this.fns.push(fn);
   };
 
   /**
