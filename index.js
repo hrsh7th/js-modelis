@@ -198,7 +198,7 @@ function create(name, option) {
    * @param {String} key
    * @return {Object}
    */
-  Modelis.prototype.get = decoratable(function(key) {
+  Modelis.prototype.get = decoratable(function get(key) {
     if (!Modelis.attrs.hasOwnProperty(key)) throw new Error('Modelis#get: `key` was not found in defined attrs.');
     return this._values[key];
   });
@@ -212,7 +212,7 @@ function create(name, option) {
    * @param {Object} value
    * @return {Object}
    */
-  Modelis.prototype.set = decoratable(function(key, value) {
+  Modelis.prototype.set = decoratable(function set(key, value) {
     if (!Modelis.attrs.hasOwnProperty(key)) throw new Error('Modelis#set: `key` was not found in defined attrs.');
     this.emit('set before', this);
     this._diff[key] = value;
@@ -220,16 +220,6 @@ function create(name, option) {
     this.emit('set after', this);
     return this;
   });
-
-  /**
-   * use set.
-   *
-   * @param {Function} fn
-   */
-  Modelis.prototype.set.use = function(fn) {
-    this.fns = this.fns || [];
-    this.fns.push(fn);
-  };
 
   /**
    * toJSON.
