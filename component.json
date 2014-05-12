@@ -1,6 +1,6 @@
 {
   "name": "modelis",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Modelis is very simple javascript modeling module on server-side and client-side.",
   "license": "MIT",
   "scripts": [
