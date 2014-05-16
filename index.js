@@ -110,15 +110,16 @@ function create(name, option) {
    * @param {Object?} values initial values.
    */
   function Modelis(values) {
-    values = _.isPlainObject(values) ? values : {};
-
     Emitter(this);
+
+    values = _.isPlainObject(values) ? values : {};
 
     this._diff = {};
     this._values = {};
     _.forOwn(Modelis.attrs, function(option, key) {
-      this._values[key] = values[key];
+      this.set(key, values[key]);
     }, this);
+    this.clean();
   }
 
   /**
@@ -144,8 +145,8 @@ function create(name, option) {
    * @param {Object?} option attribute option.
    */
   Modelis.attr = function(key, option) {
-    if (!_.isString(key)) throw new Error('Modelis.attr: `key` must be string.')
-    if (!key.length) throw new Error('Modelis.attr: `key` must be length > 0.')
+    if (!_.isString(key)) throw new Error('Modelis.attr: `key` must be string.');
+    if (!key.length) throw new Error('Modelis.attr: `key` must be length > 0.');
 
     Modelis.attrs[key] = _.isPlainObject(option) ? option : {};
 
@@ -176,7 +177,7 @@ function create(name, option) {
   Modelis.prototype.merge = function(values) {
     this.emit('merge before', this);
     _.forOwn(Modelis.attrs, function(option, key) {
-      this._values[key] = values[key];
+      this.set(key, values[key]);
     }, this);
     this.emit('merge after', this);
   };
@@ -231,12 +232,16 @@ function create(name, option) {
     aliases = _.isPlainObject(aliases) ? aliases : {};
     aliases = _.invert(aliases);
 
+    var values = _.mapValues(this._values, function(value, key) {
+      return this.get(key);
+    }, this);
+
     var json = {};
-    _.forOwn(JSON.parse(JSON.stringify(this._values)), function(value, key) {
+    _.forOwn(values, function(value, key) {
       key = aliases.hasOwnProperty(key) ? aliases[key] : key;
       json[key] = value;
     });
-    return json;
+    return JSON.parse(JSON.stringify(json));
   };
 
   return Modelis;
