@@ -28,7 +28,7 @@ exports.of = function(Modelised) {
  * @return {Boolean}
  */
 exports.instanceof = function(modelised) {
-  return _.isObject(modelised) && modelised instanceof ModelisBase;
+  return _.isObject(modelised) && modelised.constructor && modelised.constructor.name === 'ModelisBase';
 };
 
 /**
