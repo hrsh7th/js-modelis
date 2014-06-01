@@ -8,8 +8,6 @@ var Emitter = require('component-emitter');
  */
 exports.plugins = {};
 exports.plugins.assurance = require('./lib/plugins/assurance');
-exports.plugins.monk = require('./lib/plugins/monk');
-
 
 /**
  * check defined Modelised.

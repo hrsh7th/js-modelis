@@ -1,6 +1,6 @@
 {
   "name": "modelis",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Modelis is very simple javascript modeling module on server-side and client-side.",
   "homepage": "https://github.com/hrsh7th/js-modelis",
   "repository": {
@@ -26,7 +26,6 @@
     "component-emitter": "~1.1.2",
     "decoratable": "0.0.2",
     "lodash": "~2.4.1",
-    "monk": "~0.8.1",
     "promise": "~5.0.0"
   },
   "devDependencies": {

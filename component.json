@@ -5,8 +5,7 @@
   "license": "MIT",
   "scripts": [
     "index.js",
-    "lib/plugins/assurance/index.js",
-    "lib/plugins/monk/index.js"
+    "lib/plugins/assurance/index.js"
   ],
   "dependencies": {
     "component/emitter": "^1.1.2",
