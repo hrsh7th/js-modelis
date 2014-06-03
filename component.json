@@ -4,13 +4,11 @@
   "description": "Modelis is very simple javascript modeling module on server-side and client-side.",
   "license": "MIT",
   "scripts": [
-    "index.js",
-    "lib/plugins/assurance/index.js"
+    "index.js"
   ],
   "dependencies": {
     "component/emitter": "^1.1.2",
     "lodash/lodash": "^2.4.1",
-    "danmilon/assurance": "~0.2.5",
     "then/promise": "^5.0.0",
     "hrsh7th/js-decoratable": "*"
   }

@@ -3,13 +3,6 @@ var decoratable = require('decoratable');
 var Emitter = require('component-emitter');
 
 /**
- * Built-in plugins.
- * NOTICE: deprecated.
- */
-exports.plugins = {};
-exports.plugins.assurance = require('./lib/plugins/assurance');
-
-/**
  * check defined Modelised.
  *
  * @param {Object} Modelised target object.
