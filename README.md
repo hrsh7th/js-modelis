@@ -3,7 +3,17 @@ Modelis.
 
 Modelis is very simple javascript modeling module for server-side and client-side.
 
-this module is exprimental version.
+Concept
+===========
+
+- small core
+- running on browser and server
+- pluggable
+
+Plugin
+===========
+- [modelis-monk](http://github.com/hrsh7th/js-modelis-monk)
+- [modelis-assurance](http://github.com/hrsh7th/js-modelis-assurance)
 
 Usage
 ===========
