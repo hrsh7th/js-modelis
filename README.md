@@ -1,6 +1,8 @@
 Modelis.
 ===========
 
+[![Build Status](https://travis-ci.org/hrsh7th/js-modelis.png?branch=master)](https://travis-ci.org/hrsh7th/js-modelis)
+
 Modelis is very simple javascript modeling module for server-side and client-side.
 
 Concept
