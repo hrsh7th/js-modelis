@@ -1,6 +1,6 @@
 {
   "name": "modelis",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Modelis is very simple javascript modeling module for server-side and client-side.",
   "license": "MIT",
   "scripts": [
@@ -9,7 +9,6 @@
   "dependencies": {
     "component/emitter": "^1.1.2",
     "lodash/lodash": "^2.4.1",
-    "then/promise": "^5.0.0",
     "hrsh7th/js-decoratable": "*"
   }
 }

@@ -31,13 +31,38 @@ describe('Modelis', function() {
   });
 
   describe('.use', function() {
-    User.use(function() {
-      this.prototype.add = function(x, y) {
-        return x + y;
-      };
+    it('basic usage', function() {
+      User.use(function add() {
+        this.prototype.add = function(x, y) {
+          return x + y;
+        };
+      });
+      var user = new User();
+      assert.equal(user.add(1, 2), 3);
     });
-    var user = new User();
-    assert.equal(user.add(1, 2), 3);
+    it('check name', function() {
+      var error = false;
+      try {
+        User.use(function () {});
+      } catch (e) {
+        error = true;
+      }
+      assert.ok(error);
+    });
+    it('check dupulicate', function() {
+      var error = false;
+      try {
+        User.use(function minus() { this.prototype.minus = function() {}; });
+        User.use(function minus() { this.prototype.minus = function() {}; });
+      } catch (e) {
+        error = true;
+      }
+      assert.ok(error);
+    });
+    it('emit', function(done) {
+      User.on('use fn', done);
+      User.use(function fn() {});
+    });
   });
 
   describe('.define', function() {

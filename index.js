@@ -68,9 +68,19 @@ function create(name, option) {
   Modelis.prototype.constructor = ModelisBase;
 
   /**
+   * inherit emitter.
+   */
+  Emitter(Modelis);
+
+  /**
    * @type {String} name
    */
   Modelis.name = name;
+
+  /**
+   * @type {Array.<String>} used
+   */
+  Modelis.used = [];
 
   /**
    * @type {Object} attrs.
@@ -84,19 +94,6 @@ function create(name, option) {
 
   /**
    * Modelis.
-   *   -> set before
-   *   -> set after
-   *   -> clean before
-   *   -> clean after
-   *   .use()
-   *   .primaryKey()
-   *   .attr()
-   *   #primary()
-   *   #diff()
-   *   #clean()
-   *   #get()
-   *   #set()
-   *   #toJSON()
    *
    * @param {Object?} values initial values.
    */
@@ -115,9 +112,16 @@ function create(name, option) {
 
   /**
    * apply plugin.
+   *
+   * @param {Function} fn
    */
   Modelis.use = function(fn) {
+    if (!fn.name) throw new Error('argument should has `name` property.');
+    if (this.used.indexOf(fn.name) > 0) throw new Error(fn.name + ' can not dupulicate use.');
+
     fn.call(this);
+    this.used.push(fn.name);
+    this.emit('use ' + fn.name);
   };
 
   /**
