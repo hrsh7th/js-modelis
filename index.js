@@ -1,11 +1,12 @@
 var _ = require('lodash');
 var decoratable = require('decoratable');
 var Emitter = require('component-emitter');
+var nest = require('./lib/nest');
 
 /**
- * check defined Modelised.
+ * of.
  *
- * @param {Object} Modelised target object.
+ * @param {Object} Modelised
  * @return {Boolean}
  */
 exports.of = function(Modelised) {
@@ -13,9 +14,9 @@ exports.of = function(Modelised) {
 };
 
 /**
- * check instanceof Modelis.
+ * instanceof.
  *
- * @param {Object} modelised target object.
+ * @param {Object} modelised
  * @return {Boolean}
  */
 exports.instanceof = function(modelised) {
@@ -23,21 +24,13 @@ exports.instanceof = function(modelised) {
 };
 
 /**
- * define Model.
+ * define.
  *
- * - option
- *   - primaryKey: primary key name.
- *     - default: id
- *     - ex) var User = Modelis.define('User', { primaryKey: 'sample' }).attr('sample');
- *           var user = new User({ sample: 1234567890 });
- *           user.primary() #=> 1234567890
- *
- * @param {String} name Modelis constructor name.
- * @param {Object?} option Modelis option.
+ * @param {String} name
+ * @param {Object?} option
  */
 exports.define = function(name, option) {
-  if (!_.isString(name)) throw new Error('Modelis.define: `name` must be string.');
-  if (!name.length) throw new Error('Modelis.define: `name` must be length > 0.');
+  if (!_.isString(name) || !name.length) throw new Error('name is required.');
 
   option = _.defaults(option || {}, { primaryKey: 'id' });
 
@@ -50,10 +43,10 @@ exports.define = function(name, option) {
 function ModelisBase() {}
 
 /**
- * create Modelis.
+ * create.
  *
- * @param {String} name Modelis constructor name.
- * @param {Object} option Modelis option.
+ * @param {String} name
+ * @param {Object} option
  */
 function create(name, option) {
 
@@ -95,7 +88,7 @@ function create(name, option) {
   /**
    * Modelis.
    *
-   * @param {Object?} values initial values.
+   * @param {Object?} values
    */
   function Modelis(values) {
     Emitter(this);
@@ -111,7 +104,7 @@ function create(name, option) {
   }
 
   /**
-   * apply plugin.
+   * use.
    *
    * @param {Function} fn
    */
@@ -125,7 +118,7 @@ function create(name, option) {
   };
 
   /**
-   * get primary key.
+   * primaryKey.
    *
    * @return {String}
    */
@@ -134,14 +127,13 @@ function create(name, option) {
   };
 
   /**
-   * create attribute and getter/setter with option.
+   * attr.
    *
-   * @param {String} key attributeKey.
-   * @param {Object?} option attribute option.
+   * @param {String} key
+   * @param {Object?} option
    */
   Modelis.attr = function(key, option) {
-    if (!_.isString(key)) throw new Error('Modelis.attr: `key` must be string.');
-    if (!key.length) throw new Error('Modelis.attr: `key` must be length > 0.');
+    if (!_.isString(key) || !key.length) throw new Error('key is required.');
 
     Modelis.attrs[key] = _.isPlainObject(option) ? option : {};
 
@@ -149,7 +141,7 @@ function create(name, option) {
   };
 
   /**
-   * get primary key's value.
+   * primary.
    *
    * @return {Object}
    */
@@ -158,14 +150,16 @@ function create(name, option) {
   };
 
   /**
-   * get diff since from constructed or called clean.
+   * diff.
+   *
+   * @return {Object}
    */
   Modelis.prototype.diff = function() {
     return this._diff;
   };
 
   /**
-   * merge values.
+   * merge.
    *
    * @param {Object} values
    */
@@ -178,7 +172,7 @@ function create(name, option) {
   };
 
   /**
-   * clean diff.
+   * clean.
    */
   Modelis.prototype.clean = function() {
     this.emit('clean before', this);
@@ -187,9 +181,7 @@ function create(name, option) {
   };
 
   /**
-   * get value.
-   *
-   * decoratable.
+   * get.
    *
    * @param {String} key
    * @return {Object}
@@ -200,9 +192,7 @@ function create(name, option) {
   });
 
   /**
-   * set value.
-   *
-   * decoratable.
+   * set.
    *
    * @param {String} key
    * @param {Object} value
@@ -238,6 +228,11 @@ function create(name, option) {
     });
     return JSON.parse(JSON.stringify(json));
   };
+
+  /**
+   * use.
+   */
+  Modelis.use(nest());
 
   return Modelis;
 
